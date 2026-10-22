@@ -9,7 +9,7 @@ export function load() {
 }
 
 export function save(data) {
-  try { localStorage.setItem(BOOKS_KEY, JSON.stringify(data));return true; }
+  try { localStorage.setItem(BOOKS_KEY, JSON.stringify(data)); return true; }
   catch { return false; }
 }
 
