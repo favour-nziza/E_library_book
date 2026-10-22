@@ -51,9 +51,9 @@ export function validateTag(v) {
 }
 
 export function validateISBN(v) {
-  if (!v || !v.trim()) return 'ISBN is required.';
-  const clean = v.replace(/-/g, '');
-  if (!RE_ISBN_CLEAN.test(clean)) return 'Invalid ISBN-10 or ISBN-13 format.';
+  if (!v || !v.trim()) return null; // optional
+  const clean = v.trim().replace(/-/g, '');
+  if (!RE_ISBN_CLEAN.test(clean)) return 'Must be a valid ISBN-10 or ISBN-13.';
   return null;
 }
 
