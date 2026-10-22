@@ -1,5 +1,5 @@
-
-
+// scripts/search.js
+// Search utilities — re-exported from validators.js for compatibility.
 export { compileRegex, validateRegexPattern } from './validators.js';
 
 /**
@@ -17,21 +17,21 @@ export function highlight(text, re) {
 
 /**
  * Filter books array by regex across title, author, tag, notes.
-    * @param {Array} books 
-    * @param {RegExp|null} re
-    * @returns {Array} filtered books
+ * @param {Array} books
+ * @param {RegExp|null} re
+ * @returns {Array}
  */
 export function filterBooks(books, re) {
   if (!re) return books;
-  return books.filter(b => 
-           re.test(b.title)   ||
-           re.test(b.author)  ||
-           re.test(b.tag)     ||
-           re.test(b.notes || '')
+  return books.filter(b =>
+    re.test(b.title)       ||
+    re.test(b.author)      ||
+    re.test(b.tag)         ||
+    re.test(b.notes || '')
   );
 }
 
 function escHtml(s) {
-      return String(s ?? '')
-        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-} 
+  return String(s ?? '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
