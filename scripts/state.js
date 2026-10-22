@@ -34,12 +34,12 @@ export function updateRecord(id, patch) {
   if (idx === -1) return false;
   _records[idx] = { ..._records[idx], ...patch, updatedAt: new Date().toISOString() };
   save(_records);
-    return true;
+  return true;
 }
 
 export function deleteRecord(id) {
-      _records = _records.filter(r => r.id !== id);
-        save(_records);
+  _records = _records.filter(r => r.id !== id);
+  save(_records);
 }
 
 export function replaceAllRecords(records) {
@@ -47,7 +47,7 @@ export function replaceAllRecords(records) {
   save(_records);
 }
 
-
+// ── Search / Sort / Filter ────────────────────────────────
 export function setSearchPattern(re) { _searchPattern = re; }
 export function getSearchPattern()   { return _searchPattern; }
 
@@ -58,18 +58,18 @@ export function setTagFilter(tag) { _tagFilter = tag; }
 export function getTagFilter()    { return _tagFilter; }
 
 export function getFilteredSorted() {
-    let books = [..._records];
-      if (_tagFilter) list = list.filter(r => r.tag === _tagFilter);
+  let list = [..._records];
+  if (_tagFilter) list = list.filter(r => r.tag === _tagFilter);
   if (_searchPattern) {
-    books = books.filter(r =>
-        _searchPattern.test(r.title)  ||
-        _searchPattern.test(r.author) ||
-        _searchPattern.test(r.tag)    ||
-        _searchPattern.test(r.notes || '')
+    list = list.filter(r =>
+      _searchPattern.test(r.title)  ||
+      _searchPattern.test(r.author) ||
+      _searchPattern.test(r.tag)    ||
+      _searchPattern.test(r.notes || '')
     );
   }
-    const [field, dir] = _sortKey.split('-');
-     list.sort((a, b) => {
+  const [field, dir] = _sortKey.split('-');
+  list.sort((a, b) => {
     let va = a[field] ?? '', vb = b[field] ?? '';
     if (field === 'pages') { va = parseFloat(va) || 0; vb = parseFloat(vb) || 0; }
     else { va = String(va).toLowerCase(); vb = String(vb).toLowerCase(); }
@@ -78,17 +78,17 @@ export function getFilteredSorted() {
     return 0;
   });
   return list;
-} 
+}
 
-
+// ── Settings ──────────────────────────────────────────────
 export function getSettings() { return { ..._settings }; }
 
 export function updateSettings(partial) {
-    _settings = { ..._settings, ...partial };
-    saveSett(_settings);
+  _settings = { ..._settings, ...partial };
+  saveSett(_settings);
 }
 
-
+// ── Helpers ───────────────────────────────────────────────
 export function generateId() {
   return 'book_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 }
