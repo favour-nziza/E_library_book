@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
   bindForm();
   bindCatalog();
   bindSettings();
-    $('theme-toggle')?.addEventListener('click', () => {
+  $('theme-toggle')?.addEventListener('click', () => {
     const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     applyTheme(next);
     updateSettings({ theme: next });
@@ -70,13 +70,13 @@ function bindForm() {
     $(fId)?.addEventListener('blur',  () => showFieldError(fId, eId, validate()));
   });
 
-   $('f-date')?.addEventListener('focus', () => { if (!$('f-date').value) $('f-date').value = today(); });
+  $('f-date')?.addEventListener('focus', () => { if (!$('f-date').value) $('f-date').value = today(); });
 
   $('book-form')?.addEventListener('submit', e => { e.preventDefault(); handleSubmit(); });
 
   $('btn-cancel-edit')?.addEventListener('click', () => { resetForm(); navigateTo('catalog'); });
 
-    $('book-form')?.addEventListener('reset', () => setTimeout(() => {
+  $('book-form')?.addEventListener('reset', () => setTimeout(() => {
     document.querySelectorAll('.field-error').forEach(el => el.textContent = '');
     document.querySelectorAll('.field-input').forEach(el => el.classList.remove('invalid', 'valid'));
     $('form-status').textContent = '';
@@ -90,7 +90,7 @@ function handleSubmit() {
     tag:       $('f-tag').value,    isbn:      $('f-isbn').value,
     notes:     $('f-notes').value,
   };
-    const r = validateAll(f);
+  const r = validateAll(f);
   showFieldError('f-title',  'f-title-err',  r.title);
   showFieldError('f-author', 'f-author-err', r.author);
   showFieldError('f-pages',  'f-pages-err',  r.pages);
@@ -99,8 +99,8 @@ function handleSubmit() {
   showFieldError('f-isbn',   'f-isbn-err',   r.isbn);
   showFieldError('f-notes',  'f-notes-err',  r.notes);
   if (!r.allValid) { document.querySelector('.field-input.invalid')?.focus(); return; }
- 
-    const now = new Date().toISOString();
+
+  const now = new Date().toISOString();
   const editId = $('edit-id').value;
   const data = { title: f.title.trim(), author: f.author.trim(), pages: Number(f.pages),
                  dateAdded: f.dateAdded.trim(), tag: f.tag.trim(), isbn: f.isbn.trim(), notes: f.notes.trim() };
@@ -109,23 +109,23 @@ function handleSubmit() {
     updateRecord(editId, data);
     flashStatus('✓ Book updated.');
     announce('Book updated.');
-  } else {  
-        addRecord({ id: generateId(), ...data, createdAt: now, updatedAt: now });
+  } else {
+    addRecord({ id: generateId(), ...data, createdAt: now, updatedAt: now });
     flashStatus('✓ Added to the Vault!');
     announce('Book added to the Vault.');
-  }      
-    resetForm();
+  }
+  resetForm();
   refreshAll();
   navigateTo('catalog');
 }
- 
+
 // ── Catalog ───────────────────────────────────────────────
 function bindCatalog() {
   const searchInput = $('search-input');
   const searchCase  = $('search-case');
   const searchErr   = $('search-error');
 
-    function applySearch() {
+  function applySearch() {
     const raw = searchInput?.value || '';
     if (!raw.trim()) { setSearchPattern(null); searchErr.textContent = ''; renderTable(); renderCards(); return; }
     const v = validateRegexPattern(raw);
@@ -134,7 +134,7 @@ function bindCatalog() {
     renderTable(); renderCards();
   }
 
-    searchInput?.addEventListener('input', applySearch);
+  searchInput?.addEventListener('input', applySearch);
   searchCase?.addEventListener('change', applySearch);
   $('sort-select')?.addEventListener('change', () => { setSortKey($('sort-select').value); renderTable(); renderCards(); });
   $('tag-filter')?.addEventListener('change', () => { setTagFilter($('tag-filter').value); renderTable(); renderCards(); });
@@ -145,36 +145,36 @@ function bindCatalog() {
     renderTable(); renderCards();
   });
 
-    // Table actions (event delegation)
+  // Table actions (event delegation)
   $('catalog-tbody')?.addEventListener('click', async e => {
     const id = e.target.closest('[data-id]')?.dataset.id;
     if (!id) return;
     const rec = getRecords().find(r => r.id === id);
 
-        if (e.target.closest('.btn-edit')) {
+    if (e.target.closest('.btn-edit')) {
       renderEditRow(rec);
     } else if (e.target.closest('.btn-delete')) {
       if (rec && await openConfirmDialog(`Delete "${rec.title}"?`)) {
         deleteRecord(id); announce(`"${rec.title}" deleted.`); refreshAll();
       }
-          } else if (e.target.closest('.btn-save-edit')) {
+    } else if (e.target.closest('.btn-save-edit')) {
       const row = e.target.closest('tr');
       const patch = {};
-            row?.querySelectorAll('.edit-input').forEach(inp => { patch[inp.dataset.field] = inp.value; });
+      row?.querySelectorAll('.edit-input').forEach(inp => { patch[inp.dataset.field] = inp.value; });
       if (patch.pages) patch.pages = Number(patch.pages);
       updateRecord(id, patch);
-            announce('Book updated.'); refreshAll();
+      announce('Book updated.'); refreshAll();
     } else if (e.target.closest('.btn-cancel-edit-row')) {
       renderTable();
     }
   });
 
-    // Card actions (mobile)
+  // Card actions (mobile)
   $('section-catalog')?.addEventListener('click', async e => {
     if (e.target.closest('.table-wrap')) return;
     const id = e.target.closest('[data-id]')?.dataset.id;
     if (!id) return;
-        const rec = getRecords().find(r => r.id === id);
+    const rec = getRecords().find(r => r.id === id);
     if (e.target.closest('.btn-edit') && rec) {
       populateFormForEdit(rec); navigateTo('add');
     } else if (e.target.closest('.btn-delete') && rec) {
@@ -182,7 +182,7 @@ function bindCatalog() {
         deleteRecord(id); announce(`"${rec.title}" deleted.`); refreshAll();
       }
     }
-    });  
+  });
 }
 
 // ── Settings ──────────────────────────────────────────────
@@ -192,7 +192,7 @@ function bindSettings() {
     if (v < 1) { announce('Enter a valid page target.'); return; }
     updateSettings({ pageCap: v }); renderDashboard(); announce(`Target set to ${v} pages.`);
   });
-    $('btn-save-unit')?.addEventListener('click', () => {
+  $('btn-save-unit')?.addEventListener('click', () => {
     const u = $('s-unit')?.value;
     updateSettings({ unit: u }); refreshAll(); announce(`Unit changed to ${u}.`);
   });
@@ -210,23 +210,23 @@ function bindImportExport() {
     announce(`Exported ${getRecords().length} records.`);
   });
 
-    $('btn-export-csv')?.addEventListener('click', () => {
+  $('btn-export-csv')?.addEventListener('click', () => {
     const keys = ['id','title','author','pages','tag','dateAdded','isbn','notes','createdAt','updatedAt'];
     const rows = getRecords().map(r => keys.map(k => csvEsc(r[k] ?? '')).join(','));
     download([keys.join(','), ...rows].join('\r\n'), 'book-vault.csv', 'text/csv');
     announce(`Exported ${getRecords().length} records as CSV.`);
   });
 
-    $('import-file')?.addEventListener('change', async e => {
+  $('import-file')?.addEventListener('change', async e => {
     const file = e.target.files?.[0]; if (!file) return;
     try {
-              const parsed = JSON.parse(await file.text());
+      const parsed = JSON.parse(await file.text());
       const v = validateImport(parsed);
       if (!v.valid) { alert('Import failed:\n' + v.errors.join('\n')); return; }
       if (await openConfirmDialog(`Import ${parsed.length} records? This replaces your current vault.`)) {
         replaceAllRecords(parsed); announce(`Imported ${parsed.length} records.`); refreshAll();
       }
-          } catch { alert('Import failed: invalid JSON.'); }
+    } catch { alert('Import failed: invalid JSON.'); }
     finally   { e.target.value = ''; }
   });
 }
@@ -244,7 +244,7 @@ function bindConverter() {
     if (u === 'chapters') outputEl.textContent = `≈ ${Math.round(p/25)} chapters`;
     else                  outputEl.textContent = `≈ ${(p/30).toFixed(1)} hrs`;
   }
-    pagesEl?.addEventListener('input',  doConvert);
+  pagesEl?.addEventListener('input',  doConvert);
   unitEl?.addEventListener('change',  doConvert);
 }
 

@@ -39,7 +39,7 @@ export function navigateTo(sectionId) {
     const h = target.querySelector('h1');
     if (h) { h.setAttribute('tabindex', '-1'); h.focus(); }
   }
-    document.querySelectorAll('.nav-link').forEach(l => {
+  document.querySelectorAll('.nav-link').forEach(l => {
     const active = l.dataset.section === sectionId;
     l.classList.toggle('active', active);
     l.setAttribute('aria-current', active ? 'page' : 'false');
@@ -67,7 +67,7 @@ export function renderDashboard() {
   const totalPages = records.reduce((s,r) => s + (r.pages||0), 0);
 
   // Top tag
-    const tagMap = {};
+  const tagMap = {};
   records.forEach(r => { tagMap[r.tag] = (tagMap[r.tag]||0)+1; });
   const topTag = Object.entries(tagMap).sort((a,b)=>b[1]-a[1])[0]?.[0] ?? '—';
 
@@ -75,7 +75,7 @@ export function renderDashboard() {
   const cutoff = new Date(); cutoff.setDate(cutoff.getDate()-7);
   const recent = records.filter(r => new Date(r.dateAdded) >= cutoff).length;
 
-    if ($('stat-total'))   $('stat-total').textContent   = total;
+  if ($('stat-total'))   $('stat-total').textContent   = total;
   if ($('stat-pages'))   $('stat-pages').textContent   = totalPages.toLocaleString();
   if ($('stat-top-tag')) $('stat-top-tag').textContent = topTag;
   if ($('stat-recent'))  $('stat-recent').textContent  = recent;
@@ -93,7 +93,7 @@ function renderTrend(records) {
     const d = new Date(); d.setDate(d.getDate()-i);
     days.push(d.toISOString().slice(0,10));
   }
-    const counts  = days.map(day => records.filter(r => r.dateAdded === day).length);
+  const counts  = days.map(day => records.filter(r => r.dateAdded === day).length);
   const maxCount = Math.max(...counts, 1);
   const DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   chart.innerHTML = counts.map((c,i) =>
@@ -266,7 +266,7 @@ function _bindDialogOnce() {
   if (_dialogBound) return;
   _dialogBound = true;
 
-    $('dialog-confirm')?.addEventListener('click', () => {
+  $('dialog-confirm')?.addEventListener('click', () => {
     const res = _resolveDialog;
     closeDialog();
     res?.(true);
@@ -278,7 +278,7 @@ function _bindDialogOnce() {
     res?.(false);
   });
 
-    // Click on the dark overlay (not the box) also cancels
+  // Click on the dark overlay (not the box) also cancels
   $('confirm-dialog')?.addEventListener('click', e => {
     if (e.target === $('confirm-dialog')) {
       const res = _resolveDialog;
@@ -287,7 +287,7 @@ function _bindDialogOnce() {
     }
   });
 
-    $('confirm-dialog')?.addEventListener('keydown', e => {
+  $('confirm-dialog')?.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
       const res = _resolveDialog;
       closeDialog();
